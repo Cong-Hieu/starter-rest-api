@@ -75,7 +75,7 @@ app.get('/:col', async (req, res) => {
 })
 
 // Get a full listing
-app.get('/add', async (req, res) => {
+app.use('/add', async (req, res) => {
   await animals.set('leo', {
     type: 'cat',
     color: 'orange'
