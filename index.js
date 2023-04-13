@@ -89,7 +89,7 @@ app.use('*', async (req, res) => {
   if (item) {
     res.json({ msg: item }).end()
   } else {
-    res.json({ msg: 'Ok' }).end()
+    res.json({ msg: 'Oks' }).end()
   }
 })
 
