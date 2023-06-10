@@ -30,24 +30,7 @@ const s3 = new AWS.S3()
 // Catch all handler for all other request.
 app.get('/', async (req, res) => {
   // get it back
-  let my_files
-  try {
-    my_files = await s3
-      .getObject({
-        Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
-        Key: 'some_files/my_filess.json'
-      })
-      .promise()
-  } catch {
-    const listAllKey = await s3
-      .listObjectsV2({
-        Bucket: 'cyclic-pear-strange-meerkat-eu-central-1'
-      })
-      .promise()
-    const allKey = listAllKey.Contents.map((x) => x.Key)
-    return res.json({ msg: 'Not found', value: allKey }).end()
-  }
-  res.json({ msg: my_files.Body.toString('utf-8') }).end()
+  res.json({ msg: 'API is running' }).end()
 })
 
 // Get a full listing
@@ -82,10 +65,10 @@ app.get('/upload/:key', async (req, res) => {
     const allKey = listAllKey.Contents.map((x) => x.Key)
     return res.json({ msg: 'Not found', value: allKey }).end()
   }
-  res.json({ msg: my_files.Body.toString('utf-8') }).end()
+  res.json({ msg: 'ok', data: my_files.Body.toString('utf-8') }).end()
 })
 // Start the server
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8080
 app.listen(port, () => {
   console.log(`index.js listening on ${port}`)
 })
