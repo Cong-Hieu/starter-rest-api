@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd nodemon index.js",
-    "repl": "env-cmd node"
+    "repl": "env-cmd node",
+    "cdeploy": "git add . && git commit -m 'commit' && git push origin main"
   },
   "keywords": [],
   "author": "Kam Lasater <kam.lasater@cyclic.sh>",
