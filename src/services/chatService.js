@@ -184,8 +184,8 @@ const handleDeleteMessage = async (req, res) => {
 const checkPermission = async (req, res) => {
   const { chatKey } = req.body
   if (chatKey === 'hieutruong')
-    return res.json({ msg: 'ok', permission: true }).end()
-  res.json({ msg: 'Not able to access', permission: false }).end()
+    return res.json({ msg: 'ok', permission: true, chatKey }).end()
+  res.json({ msg: 'Not able to access', permission: false, chatKey }).end()
 }
 
 module.exports = {
