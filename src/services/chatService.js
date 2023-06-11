@@ -9,17 +9,12 @@ const getAllChatList = async (req, res) => {
   const { props } = data
 
   // sort object
-  const newProps = Object.keys(props)
-    .sort()
-    .reduce((obj, key) => {
-      obj[key] = props[key]
-      return obj
-    }, {})
+  const newProps = { ...props }
   Object.keys(newProps).forEach((item) => {
     const value = newProps[item]
-    if (item.includes('data')) result.push(value)
+    if (item.includes('data') && value.value.length > 0) result.push(value)
   })
-  result.reverse()
+  result.sort((a, b) => b.index - a.index)
   // get Image for data
   for await (const item of result) {
     const { value } = item
@@ -135,14 +130,14 @@ const sendMessage = async (req, res) => {
 
   // Save to dynamoDB
   const chatListStore = await chatList.get('allHistory')
-  const keyObject = `data-${
-    Object.keys(chatListStore?.props || {})?.length || 0
-  }`
+  const index = Object.keys(chatListStore?.props || {})?.length || 0
+  const keyObject = `data-${index}`
   const allHistory = {}
   allHistory[keyObject] = {
     createAt: data.find((item) => item.type === 'text').createAt,
     value: result,
-    key: parentKey
+    key: parentKey,
+    index
   }
   await chatList.set('allHistory', allHistory)
 
