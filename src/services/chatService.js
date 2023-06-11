@@ -91,25 +91,25 @@ const formatDynamoDBAndS3 = async (req, res) => {
     'cyclic-db/ac81e671/stream_lambda.zip',
     'cyclic/dist/pear-strange-meerkat-lambda.zip'
   ]
-  const listAllKey = await s3
-    .listObjectsV2({
-      Bucket: 'cyclic-pear-strange-meerkat-eu-central-1'
-    })
-    .promise()
-  const allKey = listAllKey.Contents.map((x) => x.Key).filter(
-    (x) => !exclude.includes(x)
-  )
-  allKey.forEach((item) => {
-    if (!exclude.includes(item)) {
-      try {
-        s3.deleteObject({
-          Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
-          Key: item
-        }).promise()
-      } catch {}
-    }
-  })
-  await chatList.delete('allHistory')
+  // const listAllKey = await s3
+  //   .listObjectsV2({
+  //     Bucket: 'cyclic-pear-strange-meerkat-eu-central-1'
+  //   })
+  //   .promise()
+  // const allKey = listAllKey.Contents.map((x) => x.Key).filter(
+  //   (x) => !exclude.includes(x)
+  // )
+  // allKey.forEach((item) => {
+  //   if (!exclude.includes(item)) {
+  //     try {
+  //       s3.deleteObject({
+  //         Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
+  //         Key: item
+  //       }).promise()
+  //     } catch {}
+  //   }
+  // })
+  // await chatList.delete('allHistory')
   res.json({ msg: 'ok' }).end()
 }
 
