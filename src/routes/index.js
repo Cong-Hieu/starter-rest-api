@@ -5,7 +5,9 @@ const {
   getAllChatList,
   getUploadedFileOrGetAllKey,
   deleteFileS3,
-  sendMessage
+  sendMessage,
+  formatDynamoDBAndS3,
+  handleDeleteMessage
 } = chatService
 
 const router = (app) => {
@@ -18,13 +20,17 @@ const router = (app) => {
     res.json({ msg: 'API is running' }).end()
   })
 
+  //get
   app.get('/chat', getAllChatList)
+  app.get('/format-db', formatDynamoDBAndS3)
+  app.get('/file/:key', getUploadedFileOrGetAllKey)
 
-  app.get('/upload/:key', getUploadedFileOrGetAllKey)
-
-  app.delete('/delete', deleteFileS3)
-
+  // post
   app.post('/send', sendMessage)
+  app.post('/chat/delete/:parentKey', handleDeleteMessage)
+
+  // other
+  app.delete('/delete', deleteFileS3)
 }
 
 module.exports = router
