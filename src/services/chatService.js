@@ -186,11 +186,19 @@ const handleDeleteMessage = async (req, res) => {
   res.json({ msg: 'ok' }).end()
 }
 
+const checkPermission = async (req, res) => {
+  const { chatKey } = req.body
+  if (chatKey === 'hieutruong')
+    return res.json({ msg: 'ok', permission: true }).end()
+  res.json({ msg: 'Not able to access', permission: false }).end()
+}
+
 module.exports = {
   getAllChatList,
   getUploadedFileOrGetAllKey,
   deleteFileS3,
   sendMessage,
   formatDynamoDBAndS3,
-  handleDeleteMessage
+  handleDeleteMessage,
+  checkPermission
 }

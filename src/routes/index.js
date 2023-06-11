@@ -7,7 +7,8 @@ const {
   deleteFileS3,
   sendMessage,
   formatDynamoDBAndS3,
-  handleDeleteMessage
+  handleDeleteMessage,
+  checkPermission
 } = chatService
 
 const router = (app) => {
@@ -27,6 +28,7 @@ const router = (app) => {
 
   // post
   app.post('/send', sendMessage)
+  app.post('/chat/permission', checkPermission)
   app.post('/chat/delete/:parentKey', handleDeleteMessage)
 
   // other
