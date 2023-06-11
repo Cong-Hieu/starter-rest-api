@@ -1,56 +1,19 @@
 const express = require('express')
-const cors = require('cors')
+const cors = require('./config/cors')
 const app = express()
-const CyclicDb = require('@cyclic.sh/dynamodb')
-const db = CyclicDb('pear-strange-meerkatCyclicDB')
+const dbModel = require('./config/db')
 
 app.use(express.json({ limit: '500mb' }))
 app.use(express.urlencoded({ extended: true, limit: '500mb' }))
-app.use(
-  cors({
-    origin: '*'
-  })
-)
-const chatList = db.collection('chatList')
 
-// // Get a full listing
-// app.use('/add', async (req, res) => {
-// await animals.set('leo', {
-//   type: 'cat',
-//   color: 'orange'
-// })
-//   res.json({ msg: 'ok' }).end()
-// })
+const { chatList } = dbModel
+const { s3 } = dbModel
 
-// // Catch all handler for all other request.
-// app.use('*', async (req, res) => {
-//   const item = await animals.get('leo')
-//   if (item) {
-//     res.json({ msg: item }).end()
-//   } else {
-//     res.json({ msg: item }).end()
-//   }
-// })
-const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
+cors(app)
 
-// Catch all handler for all other request.
 app.get('/', async (req, res) => {
   // get it back
   res.json({ msg: 'API is running' }).end()
-})
-
-// Get a full listing
-app.post('/adds', async (req, res) => {
-  const { file, key } = req.body
-  await s3
-    .putObject({
-      Body: file,
-      Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
-      Key: key
-    })
-    .promise()
-  res.json({ msg: 'ok' }).end()
 })
 
 app.get('/upload/:key', async (req, res) => {
@@ -74,6 +37,7 @@ app.get('/upload/:key', async (req, res) => {
   }
   res.json({ msg: 'ok', data: my_files.Body.toString('utf-8') }).end()
 })
+
 app.delete('/delete', async (req, res) => {
   const { value } = req.body
   const exclude = [
