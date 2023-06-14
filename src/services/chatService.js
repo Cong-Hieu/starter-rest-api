@@ -31,6 +31,7 @@ const updateNoteInMockApi = async (result) => {
 }
 
 const getAllChatList = async (req, res) => {
+  const { afterId } = req.query
   const result = []
   const data = await chatList.get('allHistory')
   if (!data) return res.json({ msg: 'ok', data: result }).end()
