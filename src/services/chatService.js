@@ -134,7 +134,7 @@ const sendMessage = async (req, res) => {
   const keyObject = `data-${index}`
   const allHistory = {}
   allHistory[keyObject] = {
-    createAt: data.find((item) => item.type === 'text').createAt,
+    createAt: data[0].createAt,
     value: result,
     key: parentKey,
     index
