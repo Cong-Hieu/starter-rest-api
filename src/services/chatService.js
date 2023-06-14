@@ -31,7 +31,8 @@ const updateNoteInMockApi = async (result) => {
 }
 
 const getAllChatList = async (req, res) => {
-  const { afterId } = req.query
+  const currentNumber = parseInt(req.query.currentNumber)
+  const numberLoadItem = 10
   const result = []
   const data = await chatList.get('allHistory')
   if (!data) return res.json({ msg: 'ok', data: result }).end()
@@ -48,8 +49,10 @@ const getAllChatList = async (req, res) => {
   // update to mock api
   updateNoteInMockApi([...result])
 
+  const resultLazyLoad = [...result].splice(currentNumber, currentNumber + numberLoadItem)
+  const isEnd = result.length < currentNumber + numberLoadItem
   // get Image for data
-  for await (const item of result) {
+  for await (const item of resultLazyLoad) {
     const { value } = item
     const imgList = value.filter((x) => x.type === 'file')
     for await (const fileData of imgList) {
@@ -68,7 +71,7 @@ const getAllChatList = async (req, res) => {
       }
     }
   }
-  res.json({ msg: 'ok', data: result }).end()
+  res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   // const chatListStoreGet = await chatList.delete('allHistory')
 }
 
