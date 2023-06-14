@@ -1,6 +1,34 @@
 const dbModel = require('../../config/db')
+const fetch = require('node-fetch')
+const moment = require('moment')
 
 const { chatList, s3 } = dbModel
+
+const updateNoteInMockApi = async (result) => {
+  const payloadKeepTrackData = []
+  result.forEach((item) => {
+    const { value } = item
+    value.forEach((x) => {
+      if (x.type === 'text' && x.value) {
+        const { value, createAt } = x
+        const date = moment(createAt).format('DD/MM/YYYY LT')
+        payloadKeepTrackData.push({ date, value })
+      }
+    })
+  })
+  const url = 'https://5fc6f8eaf3c77600165d7bc9.mockapi.io/upload/2'
+  const request = await fetch(url)
+  const jsonResponse = await request.json()
+  jsonResponse.dateList = payloadKeepTrackData
+  jsonResponse.countResult = jsonResponse.dateList.length
+  await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(jsonResponse)
+  })
+}
 
 const getAllChatList = async (req, res) => {
   const result = []
@@ -15,6 +43,10 @@ const getAllChatList = async (req, res) => {
     if (item.includes('data') && value.value.length > 0) result.push(value)
   })
   result.sort((a, b) => b.index - a.index)
+
+  // update to mock api
+  updateNoteInMockApi([...result])
+
   // get Image for data
   for await (const item of result) {
     const { value } = item
