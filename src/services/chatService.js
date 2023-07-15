@@ -1,6 +1,7 @@
 const dbModel = require('../../config/db')
 const fetch = require('node-fetch')
 const moment = require('moment')
+const { separateArrayByIndex } = require('../utils/helper')
 
 const { chatList, s3 } = dbModel
 
@@ -48,8 +49,11 @@ const getAllChatList = async (req, res) => {
 
   // update to mock api
   updateNoteInMockApi([...result])
-
-  const resultLazyLoad = [...result].splice(currentNumber, currentNumber + numberLoadItem)
+  const resultLazyLoad = separateArrayByIndex(
+    result,
+    currentNumber,
+    numberLoadItem
+  )
   const isEnd = result.length < currentNumber + numberLoadItem
   // get Image for data
   for await (const item of resultLazyLoad) {
