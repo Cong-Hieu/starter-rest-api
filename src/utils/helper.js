@@ -1,4 +1,5 @@
 const separateArrayByIndex = (list, fromIndex, numberLoadItem) => {
+  // This list is used to cut the order of lazy load
   const newList = [...list]
   if (fromIndex === 0) {
     return newList.splice(fromIndex, fromIndex + numberLoadItem)
