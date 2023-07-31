@@ -12,7 +12,7 @@ const updateNoteInMockApi = async (result) => {
     value.forEach((x) => {
       if (x.type === 'text' && x.value) {
         const { value, createAt } = x
-        const date = moment(createAt).format('DD/MM/YYYY LT')
+        const date = moment(createAt).utcOffset(420).format('DD/MM/YYYY LT')
         payloadKeepTrackData.push({ date, value })
       }
     })
