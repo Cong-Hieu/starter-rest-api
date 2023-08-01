@@ -13,7 +13,7 @@ const {
 
 const router = (app) => {
   // Json config
-  app.use(express.json({ limit: '500mb' }))
+  app.use(express.json({ extended: true, limit: '500mb' }))
   app.use(express.urlencoded({ extended: true, limit: '500mb' }))
 
   // Route
