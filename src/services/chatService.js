@@ -47,7 +47,7 @@ const getAllChatList = async (req, res) => {
       if (item.includes('data') && value.value.length > 0) result.push(value)
     })
     result.sort((a, b) => b.index - a.index)
-    res.json({ msg: '2', data: [], isEnd: true })
+
     // update to mock api
     updateNoteInMockApi([...result])
     const resultLazyLoad = separateArrayByIndex(
@@ -57,6 +57,7 @@ const getAllChatList = async (req, res) => {
     )
     const isEnd = result.length < currentNumber + numberLoadItem
     // get Image for data
+    res.json({ msg: '3', data: resultLazyLoad, isEnd: true })
     for await (const item of resultLazyLoad) {
       const { value } = item
       const imgList = value.filter((x) => x.type === 'file')
