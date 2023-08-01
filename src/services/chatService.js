@@ -79,7 +79,11 @@ const getAllChatList = async (req, res) => {
             Buffer.byteLength(JSON.stringify(responseJson)) / mbSize + fileSize
           if (currentSize < 6) {
             // Point to that file in copied response json
-            responseJson[index].value[childIndex].value.file = file
+            const fileObject = responseJson[index].value.find(
+              (itemFile) =>
+                itemFile.type === 'file' && itemFile.value.key === key
+            )
+            fileObject.value.file = file
           }
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
