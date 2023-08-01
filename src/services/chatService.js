@@ -73,10 +73,11 @@ const getAllChatList = async (req, res) => {
             })
             ?.promise()
           const file = my_files?.Body?.toString('utf-8')
+          // check file size for maximum 6mb (limit of deployment)
           const fileSize = Buffer.byteLength(JSON.stringify(file)) / mbSize
           const currentSize =
             Buffer.byteLength(JSON.stringify(responseJson)) / mbSize + fileSize
-          if (currentNumber < 6) {
+          if (currentSize < 6) {
             // Point to that file in copied response json
             responseJson[index].value[childIndex].value.file = file
           }
