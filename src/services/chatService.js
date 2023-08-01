@@ -62,7 +62,7 @@ const getAllChatList = async (req, res) => {
         Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
         Key: '6b575154-2320-4e37-b0b6-d286a05c262f'
       })
-      ?.promise()
+      .promise()
     res.json({ msg: 'okla', isEnd: my_filess?.Body?.toString('utf-8') })
 
     for await (const item of resultLazyLoad) {
