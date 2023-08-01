@@ -72,12 +72,13 @@ const getAllChatList = async (req, res) => {
             })
             .promise()
           value.file = my_files.Body.toString('utf-8')
-        } catch {
+        } catch (e) {
+          res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
         }
       }
     }
-    res.json({ msg: '4', data: resultLazyLoad, isEnd: true })
+
     res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   } catch (e) {
     res.json({ msg: e })
