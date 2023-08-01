@@ -91,8 +91,6 @@ const getAllChatList = async (req, res) => {
     res
       .json({
         msg: 'ok',
-        size: Buffer.byteLength(JSON.stringify(responseJson)) / mbSize,
-        mbSize,
         data: responseJson,
         isEnd
       })
