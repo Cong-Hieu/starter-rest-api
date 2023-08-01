@@ -5,6 +5,7 @@ const { separateArrayByIndex } = require('../utils/helper')
 const { chatList, s3 } = dbModel
 
 const numberLoadItem = 20
+const mbSize = Math.pow(1024, 2)
 
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
@@ -72,8 +73,13 @@ const getAllChatList = async (req, res) => {
             })
             ?.promise()
           const file = my_files?.Body?.toString('utf-8')
-          // Point to that file in copied response json
-          responseJson[index].value[childIndex].value.file = file
+          const fileSize = Buffer.byteLength(JSON.stringify(file)) / mbSize
+          const currentSize =
+            Buffer.byteLength(JSON.stringify(responseJson)) / mbSize + fileSize
+          if (currentNumber < 6) {
+            // Point to that file in copied response json
+            responseJson[index].value[childIndex].value.file = file
+          }
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
@@ -81,7 +87,15 @@ const getAllChatList = async (req, res) => {
       }
     }
 
-    res.json({ msg: 'ok', data: responseJson, isEnd }).end()
+    res
+      .json({
+        msg: 'ok',
+        size: Buffer.byteLength(JSON.stringify(responseJson)) / mbSize,
+        mbSize,
+        data: responseJson,
+        isEnd
+      })
+      .end()
   } catch (e) {
     res.json({ msg: e, isEnd: true })
   }
