@@ -57,12 +57,12 @@ const getAllChatList = async (req, res) => {
     )
     const isEnd = result.length < currentNumber + numberLoadItem
     // get Image for data
-
-    for await (const item of resultLazyLoad) {
+    const responseJson = JSON.parse(JSON.stringify(resultLazyLoad))
+    for await (const [index, item] of resultLazyLoad.entries()) {
       const { value } = item
       const imgList = value?.filter((x) => x.type === 'file')
 
-      for await (const fileData of imgList) {
+      for await (const [childIndex, fileData] of imgList.entries()) {
         const key = fileData?.value?.key
         try {
           const my_files = await s3
@@ -71,7 +71,10 @@ const getAllChatList = async (req, res) => {
               Key: key
             })
             ?.promise()
-          value.file = my_files?.Body?.toString('utf-8')
+          const file = my_files.Body.toString('utf-8')
+          responseJson[index].value[childIndex].value.file = file
+
+          const c = 2
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
@@ -79,7 +82,7 @@ const getAllChatList = async (req, res) => {
       }
     }
 
-    res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
+    res.json({ msg: 'ok', data: responseJson, isEnd }).end()
   } catch (e) {
     res.json({ msg: e, isEnd: true })
   }
