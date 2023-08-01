@@ -4,7 +4,7 @@ const moment = require('moment')
 const { separateArrayByIndex } = require('../utils/helper')
 const { chatList, s3 } = dbModel
 
-const numberLoadItem = 10
+const numberLoadItem = 5
 
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
@@ -57,13 +57,6 @@ const getAllChatList = async (req, res) => {
     )
     const isEnd = result.length < currentNumber + numberLoadItem
     // get Image for data
-    const my_filess = await s3
-      .getObject({
-        Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
-        Key: '6b575154-2320-4e37-b0b6-d286a05c262f'
-      })
-      .promise()
-    res.json({ msg: 'okla', isEnd: my_filess?.Body?.toString('utf-8') })
 
     for await (const item of resultLazyLoad) {
       const { value } = item
