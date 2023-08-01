@@ -105,7 +105,7 @@ const getUploadedFileOrGetAllKey = async (req, res) => {
     const allKey = listAllKey.Contents.map((x) => x.Key)
     return res.json({ msg: 'Not found', value: allKey }).end()
   }
-  res.json({ msg: 'ok', data: my_files.Body }).end()
+  res.json({ msg: 'ok', data: my_files.Body.toString('utf-8') }).end()
 }
 
 const deleteFileS3 = async (req, res) => {
