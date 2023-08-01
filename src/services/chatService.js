@@ -34,12 +34,12 @@ const updateNoteInMockApi = async (result) => {
 
 const getAllChatList = async (req, res) => {
   try {
-    res.json({ msg: '1', data: [], isEnd: true })
     const currentNumber = parseInt(req.query.currentNumber)
     const result = []
     const data = await chatList.get('allHistory')
     if (!data) return res.json({ msg: 'ok', data: result }).end()
     const { props } = data
+    res.json({ msg: '1', data: [], isEnd: true })
 
     // sort object
     const newProps = { ...props }
