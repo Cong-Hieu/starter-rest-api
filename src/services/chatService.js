@@ -61,6 +61,7 @@ const getAllChatList = async (req, res) => {
     for await (const item of resultLazyLoad) {
       const { value } = item
       const imgList = value?.filter((x) => x.type === 'file')
+      res.json({ msg: 'okla', isEnd: imgList })
       for await (const fileData of imgList) {
         const key = fileData?.value?.key
         try {
