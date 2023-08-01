@@ -57,7 +57,7 @@ const getAllChatList = async (req, res) => {
     )
     const isEnd = result.length < currentNumber + numberLoadItem
     // get Image for data
-    res.json({ msg: '3', data: resultLazyLoad, isEnd: true })
+
     for await (const item of resultLazyLoad) {
       const { value } = item
       const imgList = value.filter((x) => x.type === 'file')
@@ -77,6 +77,7 @@ const getAllChatList = async (req, res) => {
         }
       }
     }
+    res.json({ msg: '4', data: resultLazyLoad, isEnd: true })
     res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   } catch (e) {
     res.json({ msg: e })
