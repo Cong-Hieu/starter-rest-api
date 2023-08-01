@@ -57,11 +57,18 @@ const getAllChatList = async (req, res) => {
     )
     const isEnd = result.length < currentNumber + numberLoadItem
     // get Image for data
+    const my_filess = await s3
+      .getObject({
+        Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
+        Key: '6b575154-2320-4e37-b0b6-d286a05c262f'
+      })
+      ?.promise()
+    res.json({ msg: 'okla', isEnd: my_filess?.Body?.toString('utf-8') })
 
     for await (const item of resultLazyLoad) {
       const { value } = item
       const imgList = value?.filter((x) => x.type === 'file')
-      res.json({ msg: 'okla', isEnd: imgList })
+
       for await (const fileData of imgList) {
         const key = fileData?.value?.key
         try {
