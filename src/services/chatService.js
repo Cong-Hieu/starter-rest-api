@@ -4,7 +4,7 @@ const moment = require('moment')
 const { separateArrayByIndex } = require('../utils/helper')
 
 const { chatList, s3 } = dbModel
-
+const numberLoadItem = 20
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
   result.forEach((item) => {
@@ -33,7 +33,6 @@ const updateNoteInMockApi = async (result) => {
 
 const getAllChatList = async (req, res) => {
   const currentNumber = parseInt(req.query.currentNumber)
-  const numberLoadItem = 10
   const result = []
   const data = await chatList.get('allHistory')
   if (!data) return res.json({ msg: 'ok', data: result }).end()
