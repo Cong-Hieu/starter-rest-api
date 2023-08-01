@@ -60,18 +60,17 @@ const getAllChatList = async (req, res) => {
 
     for await (const item of resultLazyLoad) {
       const { value } = item
-      const imgList = value.filter((x) => x.type === 'file')
+      const imgList = value?.filter((x) => x.type === 'file')
       for await (const fileData of imgList) {
-        const { value } = fileData
-        const { key } = value
+        const key = fileData?.value?.key
         try {
           const my_files = await s3
             .getObject({
               Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
               Key: key
             })
-            .promise()
-          value.file = my_files.Body.toString('utf-8')
+            ?.promise()
+          value.file = my_files?.Body?.toString('utf-8')
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
@@ -81,7 +80,7 @@ const getAllChatList = async (req, res) => {
 
     res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   } catch (e) {
-    res.json({ msg: e })
+    res.json({ msg: e, isEnd: true })
   }
   // const chatListStoreGet = await chatList.delete('allHistory')
 }
