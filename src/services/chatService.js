@@ -4,7 +4,7 @@ const moment = require('moment')
 const { separateArrayByIndex } = require('../utils/helper')
 const { chatList, s3 } = dbModel
 
-const numberLoadItem = 20
+const numberLoadItem = 15
 
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
