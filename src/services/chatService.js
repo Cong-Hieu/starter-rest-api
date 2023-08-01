@@ -72,9 +72,8 @@ const getAllChatList = async (req, res) => {
             })
             ?.promise()
           const file = my_files.Body.toString('utf-8')
+          // Point to that file in copied response json
           responseJson[index].value[childIndex].value.file = file
-
-          const c = 2
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
