@@ -33,49 +33,53 @@ const updateNoteInMockApi = async (result) => {
 }
 
 const getAllChatList = async (req, res) => {
-  const currentNumber = parseInt(req.query.currentNumber)
-  const result = []
-  const data = await chatList.get('allHistory')
-  if (!data) return res.json({ msg: 'ok', data: result }).end()
-  const { props } = data
+  try {
+    const currentNumber = parseInt(req.query.currentNumber)
+    const result = []
+    const data = await chatList.get('allHistory')
+    if (!data) return res.json({ msg: 'ok', data: result }).end()
+    const { props } = data
 
-  // sort object
-  const newProps = { ...props }
-  Object.keys(newProps).forEach((item) => {
-    const value = newProps[item]
-    if (item.includes('data') && value.value.length > 0) result.push(value)
-  })
-  result.sort((a, b) => b.index - a.index)
+    // sort object
+    const newProps = { ...props }
+    Object.keys(newProps).forEach((item) => {
+      const value = newProps[item]
+      if (item.includes('data') && value.value.length > 0) result.push(value)
+    })
+    result.sort((a, b) => b.index - a.index)
 
-  // update to mock api
-  updateNoteInMockApi([...result])
-  const resultLazyLoad = separateArrayByIndex(
-    result,
-    currentNumber,
-    numberLoadItem
-  )
-  const isEnd = result.length < currentNumber + numberLoadItem
-  // get Image for data
-  for await (const item of resultLazyLoad) {
-    const { value } = item
-    const imgList = value.filter((x) => x.type === 'file')
-    for await (const fileData of imgList) {
-      const { value } = fileData
-      const { key } = value
-      try {
-        const my_files = await s3
-          .getObject({
-            Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
-            Key: key
-          })
-          .promise()
-        value.file = my_files.Body.toString('utf-8')
-      } catch {
-        value.file = ''
+    // update to mock api
+    updateNoteInMockApi([...result])
+    const resultLazyLoad = separateArrayByIndex(
+      result,
+      currentNumber,
+      numberLoadItem
+    )
+    const isEnd = result.length < currentNumber + numberLoadItem
+    // get Image for data
+    for await (const item of resultLazyLoad) {
+      const { value } = item
+      const imgList = value.filter((x) => x.type === 'file')
+      for await (const fileData of imgList) {
+        const { value } = fileData
+        const { key } = value
+        try {
+          const my_files = await s3
+            .getObject({
+              Bucket: 'cyclic-pear-strange-meerkat-eu-central-1',
+              Key: key
+            })
+            .promise()
+          value.file = my_files.Body.toString('utf-8')
+        } catch {
+          value.file = ''
+        }
       }
     }
+    res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
+  } catch (e) {
+    res.json({ msg: e }).end()
   }
-  res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   // const chatListStoreGet = await chatList.delete('allHistory')
 }
 
