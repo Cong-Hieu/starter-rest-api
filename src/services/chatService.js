@@ -2,9 +2,10 @@ const dbModel = require('../../config/db')
 const fetch = require('node-fetch')
 const moment = require('moment')
 const { separateArrayByIndex } = require('../utils/helper')
-
 const { chatList, s3 } = dbModel
+
 const numberLoadItem = 20
+
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
   result.forEach((item) => {
