@@ -39,7 +39,6 @@ const getAllChatList = async (req, res) => {
     const data = await chatList.get('allHistory')
     if (!data) return res.json({ msg: 'ok', data: result }).end()
     const { props } = data
-    res.json({ msg: '1', data: [], isEnd: true })
 
     // sort object
     const newProps = { ...props }
@@ -48,7 +47,7 @@ const getAllChatList = async (req, res) => {
       if (item.includes('data') && value.value.length > 0) result.push(value)
     })
     result.sort((a, b) => b.index - a.index)
-
+    res.json({ msg: '2', data: [], isEnd: true })
     // update to mock api
     updateNoteInMockApi([...result])
     const resultLazyLoad = separateArrayByIndex(
