@@ -4,7 +4,7 @@ const moment = require('moment')
 const { separateArrayByIndex } = require('../utils/helper')
 const { chatList, s3 } = dbModel
 
-const numberLoadItem = 10
+const numberLoadItem = 20
 
 const updateNoteInMockApi = async (result) => {
   const payloadKeepTrackData = []
@@ -81,7 +81,7 @@ const getAllChatList = async (req, res) => {
       }
     }
 
-    res.json({ msg: 'ok', data: responseJson, isEnd }).end()
+    res.json({ msg: 'ok', data: [], isEnd }).end()
   } catch (e) {
     res.json({ msg: e, isEnd: true })
   }
