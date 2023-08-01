@@ -86,7 +86,7 @@ const getAllChatList = async (req, res) => {
             fileObject.value.file = file
           }
         } catch (e) {
-          res.json({ msg: '5', data: e, isEnd: key })
+          res.json({ msg: 'API get stuck', messageData: e, isEnd: true })
           value.file = ''
         }
       }
