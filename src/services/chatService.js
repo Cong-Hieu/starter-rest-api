@@ -78,7 +78,7 @@ const getAllChatList = async (req, res) => {
     }
     res.json({ msg: 'ok', data: resultLazyLoad, isEnd }).end()
   } catch (e) {
-    res.json({ msg: e }).end()
+    res.json({ msg: e })
   }
   // const chatListStoreGet = await chatList.delete('allHistory')
 }
