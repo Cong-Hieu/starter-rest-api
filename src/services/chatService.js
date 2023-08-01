@@ -62,7 +62,7 @@ const getAllChatList = async (req, res) => {
       const { value } = item
       const imgList = value?.filter((x) => x.type === 'file')
       for await (const fileData of imgList) {
-        const key = fileData.value.key
+        const key = fileData?.value?.key
         try {
           const my_files = await s3
             .getObject({
@@ -70,7 +70,7 @@ const getAllChatList = async (req, res) => {
               Key: key
             })
             ?.promise()
-          value.file = my_files.Body.toString('utf-8')
+          value.file = my_files?.Body?.toString('utf-8')
         } catch (e) {
           res.json({ msg: '5', data: e, isEnd: key })
           value.file = ''
